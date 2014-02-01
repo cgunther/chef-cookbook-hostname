@@ -39,19 +39,19 @@ if fqdn
     file "/etc/rc.conf.d/hostname" do
       content "hostname=#{fqdn}\n"
       mode "0644"
-      notifies :reload, "ohai[reload]"
+      notifies :reload, "ohai[reload]", :immediately
     end
   else
     file "/etc/hostname" do
       content "#{hostname}\n"
       mode "0644"
-      notifies :reload, "ohai[reload]"
+      notifies :reload, "ohai[reload]", :immediately
     end
   end
 
   execute "hostname #{hostname}" do
     only_if { node['hostname'] != hostname }
-    notifies :reload, "ohai[reload]"
+    notifies :reload, "ohai[reload]", :immediately
   end
 
   hostsfile_entry "localhost" do
@@ -65,7 +65,7 @@ if fqdn
     hostname fqdn
     aliases [ hostname ]
     action :create
-    notifies :reload, "ohai[reload]"
+    notifies :reload, "ohai[reload]", :immediately
   end
 
   ohai "reload" do
